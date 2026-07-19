@@ -312,7 +312,16 @@ button { font: inherit; }
   .header-cta .btn { width: 100%; }
   .nav-toggle { display: inline-flex; z-index: 95; }
   body.nav-locked { overflow: hidden; }
+  /* CONNECT + GIVE stay visible in the top bar on mobile */
+  .header-cta--bar { display: flex; gap: .4rem; margin-left: auto; }
+  .header-cta--bar .btn { padding: .45rem .85rem; font-size: .72rem; }
+  .nav-toggle { margin-left: .4rem; }
+  /* every page listed: submenus expanded by default in the drawer */
+  .nav-sub { display: block; visibility: visible; opacity: 1; }
+  .nav-item .chev { transform: rotate(180deg); }
+  .nav-sub a { padding-left: 1.1rem; }
 }
+@media (min-width: 981px) { .header-cta--bar { display: none; } }
 
 /* ---------- Welcome hero — full-bleed photo, centered ---------- */
 .hero {
@@ -405,6 +414,7 @@ button { font: inherit; }
 .divider .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--gold); }
 
 /* ---------- Media frames ---------- */
+.frame-plx { will-change: transform; }
 .frame { position: relative; width: 100%; aspect-ratio: 16 / 9; background: var(--navy); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-3); }
 .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .frame--bare { box-shadow: var(--shadow-1); border-radius: var(--radius); }
@@ -470,8 +480,19 @@ button { font: inherit; }
 .card--cta {
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 55%, var(--teal) 130%);
   border: 0; color: #fff; box-shadow: var(--shadow-2);
-  display: grid; align-content: center; justify-items: start; gap: .4rem;
-  min-height: 11rem;
+  display: grid; align-content: end; justify-items: start; gap: .4rem;
+  min-height: 15rem; position: relative; isolation: isolate; overflow: hidden;
+}
+.card--cta .card-media { position: absolute; inset: 0; z-index: -2; }
+.card--cta .card-media img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 0;
+  filter: contrast(1.05) saturate(1.05); box-shadow: none;
+  transition: transform 1.1s var(--ease-out);
+}
+.card--cta:hover .card-media img { transform: scale(1.06); }
+.card--cta-img::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(196deg, rgba(18, 48, 60, .12) 30%, rgba(18, 48, 60, .55) 62%, rgba(11, 27, 34, .93) 100%);
 }
 .card--cta h3 { color: #fff; font-size: 1.5rem; }
 .card--cta p { color: var(--on-evening-muted); }
@@ -638,6 +659,7 @@ button { font: inherit; }
     <a class="header-logo" href="#/" aria-label="FAITH FELLOWSHIP — Home">
       <img src="https://static.wixstatic.com/media/ade83b_20b2ee45191a44d792b352dd2c702844~mv2.png/v1/fill/w_220,h_138,al_c,q_90/logo.png" srcset="https://static.wixstatic.com/media/ade83b_20b2ee45191a44d792b352dd2c702844~mv2.png/v1/fill/w_220,h_138,al_c,q_90/logo.png 1x, https://static.wixstatic.com/media/ade83b_20b2ee45191a44d792b352dd2c702844~mv2.png/v1/fill/w_440,h_277,al_c,q_90/logo.png 2x" alt="Faith Fellowship Logo" width="220" height="138">
     </a>
+    <div class="header-cta--bar"><a class="btn btn--primary btn--sm" href="https://faithfellowship.ccbchurch.com/goto/forms/8/responses/new" target="_blank" rel="noopener">CONNECT</a><a class="btn btn--gold btn--sm" href="https://app.securegive.com/faith-fellowship/online" target="_blank" rel="noopener">GIVE</a></div>
     <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path class="bars" d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/><path class="x" d="M6 6l12 12M18 6 6 18" stroke-linecap="round" style="display:none"/></svg>
     </button>
@@ -814,7 +836,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container container--text">
     
-    <div class="frame" style="aspect-ratio:3 / 4" data-reveal>
+    <div class="frame" style="aspect-ratio:3 / 4" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://js.certifiedcode.io/pdf-viewer-sb/index.html?parentUrl=https%3A%2F%2Fwww.faith-fellowship.us%2Fbulletin&amp;options=%7B%22pdfUrl%22%3A%22https%3A%2F%2Fade83b8e-204b-4368-9c39-f8117e0f2e13.usrfiles.com%2Fugd%2Fade83b_9fa37d677784476f9c82a01fbd687b12.pdf%22%2C%22viewMode%22%3A%22simple%22%2C%22layout%22%3A%224%22%2C%22skin%22%3A%22light%22%2C%22skinColor%22%3A%22%22%2C%22skinBackground%22%3A%22%22%2C%22backgroundColor%22%3A%22%22%2C%22btnPrint%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnDownloadPages%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnShare%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnFirst%22%3A%7B%22enabled%22%3Afalse%7D%2C%22btnPrev%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnNext%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnLast%22%3A%7B%22enabled%22%3Afalse%7D%2C%22btnZoomIn%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnZoomOut%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnRotateLeft%22%3A%7B%22enabled%22%3Afalse%7D%2C%22btnRotateRight%22%3A%7B%22enabled%22%3Afalse%7D%2C%22btnAutoplay%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnSearch%22%3A%7B%22enabled%22%3Afalse%7D%2C%22btnSelect%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnBookmark%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnNotes%22%3A%7B%22enabled%22%3Afalse%7D%2C%22btnToc%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnThumbs%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnExpand%22%3A%7B%22enabled%22%3Atrue%7D%2C%22btnDownloadPdf%22%3A%7B%22enabled%22%3Atrue%7D%2C%22rightToLeft%22%3Afalse%2C%22sound%22%3Atrue%2C%22googleAnalyticsTrackingCode%22%3A%22%22%7D" title="This Week&#39;s Bulletin — PDF viewer" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -995,7 +1017,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container container--text">
     
-    <div class="frame frame--bare frame--light" style="aspect-ratio:3 / 4" data-reveal>
+    <div class="frame frame--bare frame--light" style="aspect-ratio:3 / 4" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://www.powr.io/plugins/form-builder/wix_cached_view?pageId=fzx3t&amp;compId=comp-im4j5mgv&amp;viewerCompId=comp-im4j5mgv&amp;siteRevision=10221&amp;viewMode=site&amp;deviceType=desktop&amp;locale=en&amp;tz=America%2FLos_Angeles&amp;regionalLanguage=en&amp;width=655&amp;height=469&amp;instance=eQEOrc-gqbQIhAQiOmnedrbeReHiz42vYpw5hhhaXWU.eyJpbnN0YW5jZUlkIjoiMDA4ZmU1NjEtOTNmOC00ODgxLTk2OWEtM2QzMGM0MDYyMTQ5IiwiYXBwRGVmSWQiOiIxMzNjOGU5NS05MTJhLTg4MjYtZmEyNi01YTAwYTliY2Y1NzQiLCJzaWduRGF0ZSI6IjIwMjYtMDctMTlUMTg6MzA6MDguMDg4WiIsInZlbmRvclByb2R1Y3RJZCI6InByZW1pdW0iLCJkZW1vTW9kZSI6ZmFsc2UsImFpZCI6IjY0ZjYxMjlkLTdmZDAtNDQyNC1hMGMzLTBiYjYwNmFkNjczMSIsInNpdGVPd25lcklkIjoiYWRlODNiOGUtMjA0Yi00MzY4LTljMzktZjgxMTdlMGYyZTEzIiwiYnMiOiJxNzhrR1BVSGNWTnFMOFFQb1M3OUVUeTFiaEM1Z3UxWXFkMkpRSm5aTlNvIiwic2NkIjoiMjAxNi0wMi0xNlQyMjo1NzozNS41NTFaIn0&amp;currency=USD&amp;currentCurrency=USD&amp;commonConfig=%7B%22brand%22%3A%22wix%22%2C%22host%22%3A%22VIEWER%22%2C%22bsi%22%3A%2295103ad2-e21e-470e-8a0f-612ad1eead0a%7C1%22%2C%22siteRevision%22%3A%2210221%22%2C%22renderingFlow%22%3A%22NONE%22%2C%22language%22%3A%22en%22%2C%22locale%22%3A%22en-us%22%2C%22BSI%22%3A%2295103ad2-e21e-470e-8a0f-612ad1eead0a%7C1%22%7D&amp;currentRoute=.%2Fcontact&amp;vsi=e52579a8-94b3-4294-b1e1-1eec2bab45b9" title="Contact form" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -1150,7 +1172,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame frame--bare frame--light" style="aspect-ratio:4 / 5" data-reveal>
+    <div class="frame frame--bare frame--light" style="aspect-ratio:4 / 5" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://my.display.church/c/mQrwd8xQ" title="Faith Fellowship event calendar" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -1268,7 +1290,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://player.vimeo.com/video/829837431?title=0&amp;autopause=0&amp;app_id=122963" title="What Is GriefShare?" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -1345,7 +1367,7 @@ button { font: inherit; }
       <h2>LIVE STREAM</h2>
       <p class="lead">SUNDAY 9am &amp; 11:15am | WEDNESDAY 7pm</p>
     </div>
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://www.youtube.com/embed/live_stream?channel=UCqU-tbqMQMVSbAggqw1ZURg" title="Faith Fellowship Livestream" loading="lazy" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
     </div>
     
@@ -1360,7 +1382,7 @@ button { font: inherit; }
       <h2>CATCH UP ON OUR LATEST SERVICES</h2>
       
     </div>
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://www.youtube.com/embed/videoseries?list=UUqU-tbqMQMVSbAggqw1ZURg" title="Faith Fellowship latest services — YouTube playlist" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
     </div>
     
@@ -1372,11 +1394,13 @@ button { font: inherit; }
   <div class="container">
     
     <div class="grid grid--2">
-      <div class="card prose card--cta" data-reveal data-rv="rv-scale" data-plx="-0.035" style="--reveal-i:0">
+      <div class="card prose card--cta card--cta-img" data-reveal data-rv="rv-scale" data-plx="-0.035" style="--reveal-i:0">
+        <span class="card-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560" srcset="https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=450&amp;h=280 450w, https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560 900w, https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=1350&amp;h=840 1350w" sizes="(min-width: 900px) 44vw, 100vw" alt="" width="5472" height="3648" loading="lazy" decoding="async"></span>
         
         
         <p style="margin-top:var(--sp-2)"><a class="btn btn--gold" href="https://app.securegive.com/faith-fellowship" target="_blank" rel="noopener">ONLINE GIVING CLICK HERE</a></p>
-      </div><div class="card prose card--cta" data-reveal data-rv="rv-scale" data-plx="0.035" style="--reveal-i:1">
+      </div><div class="card prose card--cta card--cta-img" data-reveal data-rv="rv-scale" data-plx="0.035" style="--reveal-i:1">
+        <span class="card-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560" srcset="https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=450&amp;h=280 450w, https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560 900w, https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=1350&amp;h=840 1350w" sizes="(min-width: 900px) 44vw, 100vw" alt="" width="4898" height="3265" loading="lazy" decoding="async"></span>
         <h3>Join a Team</h3>
         
         <p style="margin-top:var(--sp-2)"><a class="btn btn--primary" href="https://faithfellowship.ccbchurch.com/goto/forms/40/responses/new" target="_blank" rel="noopener">CLICK TO VOLUNTEER</a></p>
@@ -1394,27 +1418,27 @@ button { font: inherit; }
     </div>
     <div class="tiles--scroll">
       <a class="tile" href="#/singles" data-reveal data-rv="rv-scale" style="--reveal-i:0">
-        <img src="https://static.wixstatic.com/media/ade83b_0ad521bbc59f49399a36eeb4dcdae038~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_0ad521bbc59f49399a36eeb4dcdae038.jpg" srcset="https://static.wixstatic.com/media/ade83b_0ad521bbc59f49399a36eeb4dcdae038~mv2.jpg/v1/fill/w_320,h_400,al_c,q_85/ade83b_0ad521bbc59f49399a36eeb4dcdae038.jpg 320w, https://static.wixstatic.com/media/ade83b_0ad521bbc59f49399a36eeb4dcdae038~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_0ad521bbc59f49399a36eeb4dcdae038.jpg 640w, https://static.wixstatic.com/media/ade83b_0ad521bbc59f49399a36eeb4dcdae038~mv2.jpg/v1/fill/w_960,h_1200,al_c,q_85/ade83b_0ad521bbc59f49399a36eeb4dcdae038.jpg 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Singles thumbnail copy.jpg" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="group of people holding hands while watching performance — photographer titled it &#39;Worship&#39;" width="5472" height="3648" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /></svg></span>
         <span class="tile-body"><span class="tile-title">SINGLES MINISTRY</span></span>
       </a><a class="tile" href="#/youth" data-reveal data-rv="rv-scale" style="--reveal-i:1">
-        <img src="https://static.wixstatic.com/media/ade83b_e8a01b8f88494e84b456b3325b23437c~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_e8a01b8f88494e84b456b3325b23437c.jpg" srcset="https://static.wixstatic.com/media/ade83b_e8a01b8f88494e84b456b3325b23437c~mv2.jpg/v1/fill/w_320,h_400,al_c,q_85/ade83b_e8a01b8f88494e84b456b3325b23437c.jpg 320w, https://static.wixstatic.com/media/ade83b_e8a01b8f88494e84b456b3325b23437c~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_e8a01b8f88494e84b456b3325b23437c.jpg 640w, https://static.wixstatic.com/media/ade83b_e8a01b8f88494e84b456b3325b23437c~mv2.jpg/v1/fill/w_960,h_1200,al_c,q_85/ade83b_e8a01b8f88494e84b456b3325b23437c.jpg 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Revive Youth.jpg" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Friends at the beach — photography of five people near outdoor during daytime" width="9000" height="6000" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></svg></span>
         <span class="tile-body"><span class="tile-title">YOUTH</span></span>
       </a><a class="tile" href="#/men" data-reveal data-rv="rv-scale" style="--reveal-i:2">
-        <img src="https://static.wixstatic.com/media/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd.jpg" srcset="https://static.wixstatic.com/media/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd~mv2.jpg/v1/fill/w_320,h_400,al_c,q_85/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd.jpg 320w, https://static.wixstatic.com/media/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd.jpg 640w, https://static.wixstatic.com/media/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd~mv2.jpg/v1/fill/w_960,h_1200,al_c,q_85/ade83b_aa6ec3695e6349a09ab6dc4ccbbc81dd.jpg 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Mens Banner.jpg" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="four men sitting beside table — candid cafe conversation among friends" width="3700" height="4373" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg></span>
         <span class="tile-body"><span class="tile-title">MENS MINISTRY</span></span>
       </a><a class="tile" href="#/sundayschool" data-reveal data-rv="rv-scale" style="--reveal-i:3">
-        <img src="https://static.wixstatic.com/media/ade83b_760b373a70a3481ca0a3c1ee96d37739~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_760b373a70a3481ca0a3c1ee96d37739.jpg" srcset="https://static.wixstatic.com/media/ade83b_760b373a70a3481ca0a3c1ee96d37739~mv2.jpg/v1/fill/w_320,h_400,al_c,q_85/ade83b_760b373a70a3481ca0a3c1ee96d37739.jpg 320w, https://static.wixstatic.com/media/ade83b_760b373a70a3481ca0a3c1ee96d37739~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_760b373a70a3481ca0a3c1ee96d37739.jpg 640w, https://static.wixstatic.com/media/ade83b_760b373a70a3481ca0a3c1ee96d37739~mv2.jpg/v1/fill/w_960,h_1200,al_c,q_85/ade83b_760b373a70a3481ca0a3c1ee96d37739.jpg 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Sunday School.jpg" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Teacher guiding children drawing at a table" width="6720" height="4480" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14" /> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></svg></span>
         <span class="tile-body"><span class="tile-title">SUNDAY SCHOOL</span></span>
       </a><a class="tile" href="#/women" data-reveal data-rv="rv-scale" style="--reveal-i:4">
-        <img src="https://static.wixstatic.com/media/ade83b_9703c48bb4084fedbcc4a9adc0730be9~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_9703c48bb4084fedbcc4a9adc0730be9.jpg" srcset="https://static.wixstatic.com/media/ade83b_9703c48bb4084fedbcc4a9adc0730be9~mv2.jpg/v1/fill/w_320,h_400,al_c,q_85/ade83b_9703c48bb4084fedbcc4a9adc0730be9.jpg 320w, https://static.wixstatic.com/media/ade83b_9703c48bb4084fedbcc4a9adc0730be9~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_9703c48bb4084fedbcc4a9adc0730be9.jpg 640w, https://static.wixstatic.com/media/ade83b_9703c48bb4084fedbcc4a9adc0730be9~mv2.jpg/v1/fill/w_960,h_1200,al_c,q_85/ade83b_9703c48bb4084fedbcc4a9adc0730be9.jpg 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Womens Zoom.jpg" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="people laughing and talking outside during daytime" width="5472" height="3648" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1" /> <circle cx="12" cy="8" r="2" /> <path d="M12 10v12" /> <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z" /> <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z" /></svg></span>
         <span class="tile-body"><span class="tile-title">WOMEN&#39;S MINISTRY</span></span>
       </a><a class="tile" href="#/smallgroups" data-reveal data-rv="rv-scale" style="--reveal-i:5">
-        <img src="https://static.wixstatic.com/media/ade83b_8410d31d7f0c40d5855d9caeaec83470~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_8410d31d7f0c40d5855d9caeaec83470.jpg" srcset="https://static.wixstatic.com/media/ade83b_8410d31d7f0c40d5855d9caeaec83470~mv2.jpg/v1/fill/w_320,h_400,al_c,q_85/ade83b_8410d31d7f0c40d5855d9caeaec83470.jpg 320w, https://static.wixstatic.com/media/ade83b_8410d31d7f0c40d5855d9caeaec83470~mv2.jpg/v1/fill/w_640,h_800,al_c,q_85/ade83b_8410d31d7f0c40d5855d9caeaec83470.jpg 640w, https://static.wixstatic.com/media/ade83b_8410d31d7f0c40d5855d9caeaec83470~mv2.jpg/v1/fill/w_960,h_1200,al_c,q_85/ade83b_8410d31d7f0c40d5855d9caeaec83470.jpg 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Small Groups thumbnail.jpg" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="3 women and 2 men sitting on couch — friends on film (Portra 400)" width="3290" height="4606" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></span>
         <span class="tile-body"><span class="tile-title">SMALL GROUPS</span></span>
       </a>
@@ -1524,7 +1548,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://static.parastorage.com/services/santa/1.13152.0/node_modules/@wix/santa-galleries/target/Thumbnails/Thumbnails.html?compId=comp-in19d2mu&amp;deviceType=desktop&amp;locale=en&amp;viewMode=site" title="Embedded content" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -1591,7 +1615,7 @@ button { font: inherit; }
 <section class="section section--evening">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://player.restream.io/?token=23acf2af37ee49d58851b59113e65f45&amp;vwrs=1" title="Faith Fellowship Livestream player" loading="lazy" allowfullscreen allow="autoplay"></iframe>
     </div>
     
@@ -1699,7 +1723,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://members.wixapps.net/_api/members-area/app/members?pageId=w9nqi&amp;compId=TPASection_lzpwmbt0&amp;viewerCompId=TPASection_lzpwmbt0&amp;siteRevision=10221&amp;viewMode=site&amp;deviceType=desktop&amp;locale=en&amp;tz=America%2FLos_Angeles&amp;regionalLanguage=en&amp;width=980&amp;height=500&amp;instance=W80MI0lygj89408-ZVsn5L-svgAh21fMLdF7KBW3A9E.eyJpbnN0YW5jZUlkIjoiMWEyZTY3OTEtZGYyZi00Yjk3LTllNzktN2Y0NGQ3YjdmMTVmIiwiYXBwRGVmSWQiOiIxNGRiZWZkMi0wMWI0LWZiNjEtMzJhNy0zYWJkNDRkYTQ5MDgiLCJtZXRhU2l0ZUlkIjoiNzZiZGJmYjEtNzU2OC00MzIxLThkMTQtOTE5MjUwYTVhMzYzIiwic2lnbkRhdGUiOiIyMDI2LTA3LTE5VDE4OjIzOjA5LjU0MFoiLCJkZW1vTW9kZSI6ZmFsc2UsImFpZCI6IjgyMWFlMzI4LWZkMzUtNDI4Ny05N2VkLTlhOTIzZTdkZjgzMSIsImJpVG9rZW4iOiI2YzkzZDgyMC1hYTQ3LTA4YjYtMTM2ZC1lZWQ2ODcxMjUyM2MiLCJzaXRlT3duZXJJZCI6ImFkZTgzYjhlLTIwNGItNDM2OC05YzM5LWY4MTE3ZTBmMmUxMyIsImJzIjoiMHk3bFRKcHVNYVgwRWRKN18wNElnQXZkVUpHZjJlRHpOOEJYbS12MWlFSSIsInNjZCI6IjIwMTYtMDItMTZUMjI6NTc6MzUuNTUxWiJ9&amp;currency=USD&amp;currentCurrency=USD&amp;commonConfig=%7B%22brand%22%3A%22wix%22%2C%22host%22%3A%22VIEWER%22%2C%22bsi%22%3A%22d90e53a9-50ea-4e38-ad7f-1a8e018c62d2%7C1%22%2C%22siteRevision%22%3A%2210221%22%2C%22renderingFlow%22%3A%22NONE%22%2C%22language%22%3A%22en%22%2C%22locale%22%3A%22en-us%22%2C%22BSI%22%3A%22d90e53a9-50ea-4e38-ad7f-1a8e018c62d2%7C1%22%7D&amp;currentRoute=.%2Fmembers&amp;target=_top&amp;section-url=https%3A%2F%2Fwww.faith-fellowship.us%2Fmembers%2F&amp;vsi=62e18e91-2bfe-4427-aafd-f3ca443123fc" title="Members" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -1806,7 +1830,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://plugin.eventscalendar.co/widget.html?pageId=wbals&amp;compId=comp-iqio3r1c&amp;viewerCompId=comp-iqio3r1c&amp;siteRevision=10221&amp;viewMode=site&amp;deviceType=desktop&amp;locale=en&amp;tz=America%2FLos_Angeles&amp;regionalLanguage=en&amp;width=500&amp;height=598&amp;instance=wqOJgswYrnu-XRGF6zEe59s5QRgseD2uQE4jU0C4DP4.eyJpbnN0YW5jZUlkIjoiZWY2N2VlOWYtNTgxNi00OGJmLTk5ZjUtNjAwMTYwOTUxYzAzIiwiYXBwRGVmSWQiOiIxMzNiYjExZS1iM2RiLTdlM2ItNDliYy04YWExNmFmNzJjYWMiLCJzaWduRGF0ZSI6IjIwMjYtMDctMTlUMTg6MzI6MjAuNTExWiIsInZlbmRvclByb2R1Y3RJZCI6InByZW1pdW0iLCJkZW1vTW9kZSI6ZmFsc2UsImFpZCI6ImQ5YTdhN2ExLWM5ODMtNGJjMS1hMjIzLTc4MjQxMWJjZWZhYiIsInNpdGVPd25lcklkIjoiYWRlODNiOGUtMjA0Yi00MzY4LTljMzktZjgxMTdlMGYyZTEzIiwiYnMiOiJRQkZRNG4wTTBIc29Jenp0alFPMXZOajZFSWZHd2wxZWx4bllWZXdIY29jIiwic2NkIjoiMjAxNi0wMi0xNlQyMjo1NzozNS41NTFaIn0&amp;currency=USD&amp;currentCurrency=USD&amp;commonConfig=%7B%22brand%22%3A%22wix%22%2C%22host%22%3A%22VIEWER%22%2C%22bsi%22%3A%22125fc509-9750-482b-b481-5cce51e18926%7C1%22%2C%22siteRevision%22%3A%2210221%22%2C%22renderingFlow%22%3A%22NONE%22%2C%22language%22%3A%22en%22%2C%22locale%22%3A%22en-us%22%2C%22BSI%22%3A%22125fc509-9750-482b-b481-5cce51e18926%7C1%22%7D&amp;currentRoute=.%2Fmen2&amp;vsi=82e8ac35-c168-419b-b232-ffedf8197ad8" title="Events Calendar" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -1983,7 +2007,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://faithfellowship.ccbchurch.com/goto/forms/55/responses/new" title="Embedded Content" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -2158,7 +2182,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://my.display.church/g/mQrBBFht" title="Embedded Content" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -2272,7 +2296,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://www.youtube.com/embed/videoseries?list=UUqU-tbqMQMVSbAggqw1ZURg" title="Faith Fellowship videos — YouTube playlist" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
     </div>
     
@@ -2323,7 +2347,7 @@ button { font: inherit; }
 <section class="section">
   <div class="container">
     
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://www.powr.io/plugins/form-builder/wix_cached_view?pageId=bvl4x&amp;compId=comp-in24bnqk&amp;viewerCompId=comp-in24bnqk&amp;siteRevision=10221&amp;viewMode=site&amp;deviceType=desktop&amp;locale=en&amp;tz=America%2FLos_Angeles&amp;regionalLanguage=en&amp;width=896&amp;height=756&amp;instance=Kt-THzLZtAlXQ0cRkLWGJuzAMYPrvwIIVUOAI5zauRQ.eyJpbnN0YW5jZUlkIjoiMDA4ZmU1NjEtOTNmOC00ODgxLTk2OWEtM2QzMGM0MDYyMTQ5IiwiYXBwRGVmSWQiOiIxMzNjOGU5NS05MTJhLTg4MjYtZmEyNi01YTAwYTliY2Y1NzQiLCJzaWduRGF0ZSI6IjIwMjYtMDctMTlUMTg6MzM6MjYuNzEzWiIsInZlbmRvclByb2R1Y3RJZCI6InByZW1pdW0iLCJkZW1vTW9kZSI6ZmFsc2UsImFpZCI6ImQ3ZjhlZDAwLTNlNGItNDhlOC1iNjkzLTA1MmRiZmY3MTMzOCIsInNpdGVPd25lcklkIjoiYWRlODNiOGUtMjA0Yi00MzY4LTljMzktZjgxMTdlMGYyZTEzIiwiYnMiOiJEYmp6NUh4c2VzWUlvUDZEVG9SeDBvWVdzY0hLYmFzVklXUFdlVDN2N2NRIiwic2NkIjoiMjAxNi0wMi0xNlQyMjo1NzozNS41NTFaIn0&amp;currency=USD&amp;currentCurrency=USD&amp;commonConfig=%7B%22brand%22%3A%22wix%22%2C%22host%22%3A%22VIEWER%22%2C%22bsi%22%3A%225171e54b-1ba6-4207-9afa-32d8cdb35beb%7C1%22%2C%22siteRevision%22%3A%2210221%22%2C%22renderingFlow%22%3A%22NONE%22%2C%22language%22%3A%22en%22%2C%22locale%22%3A%22en-us%22%2C%22BSI%22%3A%225171e54b-1ba6-4207-9afa-32d8cdb35beb%7C1%22%7D&amp;currentRoute=.%2Fvolunteerold&amp;vsi=252df598-172c-4a1b-a0db-975ecb6b660f" title="Forms &amp; Payments" loading="lazy" allowfullscreen></iframe>
     </div>
     
@@ -2410,7 +2434,7 @@ button { font: inherit; }
       <h2>DISCIPLESHIP LIVESTREAM ARCHIVES</h2>
       
     </div>
-    <div class="frame" data-reveal>
+    <div class="frame" data-reveal data-rv="rv-scale" data-plx="0.028">
       <iframe data-src="https://www.youtube.com/embed/videoseries?list=UUqU-tbqMQMVSbAggqw1ZURg" title="Faith Fellowship videos — YouTube playlist" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
     </div>
     
