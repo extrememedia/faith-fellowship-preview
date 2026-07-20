@@ -351,7 +351,7 @@ button { font: inherit; }
 .hero-tagline {
   font-family: var(--label); font-size: clamp(.85rem, 1.3vw, 1rem); font-weight: 500;
   letter-spacing: .3em; color: var(--gold-soft); margin: 0 0 var(--sp-3);
-  text-shadow: 0 1px 18px rgba(10, 26, 33, .6);
+  text-shadow: 0 1px 4px rgba(10, 26, 33, .9), 0 1px 22px rgba(10, 26, 33, .8);
 }
 .hero-sub { font-size: var(--fs-lead); color: rgba(255, 255, 255, .92); max-width: 40rem; margin-inline: auto; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .7rem; margin-top: var(--sp-3); }
@@ -418,7 +418,7 @@ button { font: inherit; }
 
 /* Full-width banner-art hero (source ministry banners, uncropped) */
 .hero-banner { background: var(--navy); border-bottom: 4px solid var(--gold); }
-.hero-banner-img { display: block; width: 100%; height: auto; max-height: 62vh; object-fit: cover; }
+.hero-banner-img { display: block; width: 100%; height: auto; }
 .page-hero--after-banner { min-height: 0; border-bottom: 0; }
 .page-hero--after-banner .page-hero-inner { padding-block: clamp(1.7rem, 4vh, 2.6rem) clamp(.8rem, 2vh, 1.4rem); }
 
@@ -523,6 +523,11 @@ button { font: inherit; }
 /* ---------- Quick actions — navy deck over hero + default list ---------- */
 .section--overlap { padding-block: 0 var(--sp-5); background: transparent; }
 .section--overlap .action-strip { margin-top: -3.4rem; position: relative; z-index: 5; }
+@media (max-width: 980px) {
+  .section--overlap { padding-top: var(--sp-3); }
+  .section--overlap .action-strip { margin-top: 0; }
+  .section--overlap .action-card { border: 1px solid rgba(255, 255, 255, .16); }
+}
 @media (min-width: 1100px) { .section--overlap .action-strip { grid-template-columns: repeat(3, 1fr); } }
 .action-strip { display: grid; gap: .9rem; grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); }
 .action-card {
@@ -670,12 +675,127 @@ button { font: inherit; }
 .stack-sm > * + * { margin-top: var(--sp-1); }
 .overflow-x { overflow-x: auto; }
 
+/* ============================================================
+   Cinematic interaction layer
+   ============================================================ */
+
+/* Loading veil — identity-first, ≤1.2s, skipped on repeat visits */
+.veil {
+  position: fixed; inset: 0; z-index: 300; display: grid; place-content: center; gap: 1.1rem;
+  justify-items: center; background: linear-gradient(160deg, var(--evening), var(--evening-2));
+  transition: opacity .5s var(--ease-out), visibility .5s;
+}
+.veil img { height: 84px; width: auto; filter: brightness(1.6); animation: veilIn .7s var(--ease-out) both; }
+.veil-line { width: 0; height: 3px; border-radius: 2px; background: var(--gold-soft); animation: veilLine 1s .15s var(--ease-out) both; }
+.veil.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+.no-js .veil { display: none; }
+@keyframes veilIn { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes veilLine { to { width: 8.5rem; } }
+@media (prefers-reduced-motion: reduce) { .veil { display: none; } }
+
+/* Scroll progress */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 260; pointer-events: none; }
+.scroll-progress span {
+  display: block; height: 100%; transform-origin: 0 50%; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+}
+
+/* Custom cursor halo — fine pointers only */
+.cursor-dot, .cursor-halo { position: fixed; top: 0; left: 0; z-index: 320; pointer-events: none; border-radius: 999px; will-change: transform; }
+.cursor-dot { width: 7px; height: 7px; background: var(--gold); translate: -50% -50%; }
+.cursor-halo {
+  width: 38px; height: 38px; border: 1.5px solid rgba(176, 126, 61, .55); translate: -50% -50%;
+  transition: width .25s var(--ease-out), height .25s var(--ease-out), border-color .25s, background-color .25s;
+}
+.cursor-halo.is-active { width: 58px; height: 58px; border-color: rgba(176, 126, 61, .9); background: rgba(176, 126, 61, .08); }
+@media (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor-dot, .cursor-halo { display: none !important; } }
+
+/* Flip-over CTAs — 3D vertical flip, same label on both faces */
+.btn-flip { padding: 0; background: transparent !important; overflow: visible; perspective: 480px; border: 0; }
+.btn-flip::after { display: none; }
+.flip-inner {
+  position: relative; display: grid; transform-style: preserve-3d;
+  transition: transform .5s var(--ease-out); border-radius: 999px;
+}
+.flip-face {
+  grid-area: 1 / 1; display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .68rem 1.5rem; border-radius: 999px; backface-visibility: hidden; white-space: nowrap;
+}
+.btn-flip.btn--gold .flip-face { background: var(--gold-deep); color: #fff; }
+.btn-flip.btn--gold .flip-face--back { background: var(--gold); }
+.btn-flip.btn--primary .flip-face { background: var(--navy); color: #fff; }
+.btn-flip.btn--primary .flip-face--back { background: var(--navy-2); }
+.btn-flip.btn--on-dark .flip-face { background: #fff; color: var(--navy); }
+.btn-flip.btn--on-dark .flip-face--back { background: var(--cream); }
+.btn-flip.btn--ghost-dark .flip-face { border: 2px solid rgba(242,246,247,.45); color: var(--on-evening); background: rgba(11,27,34,.25); }
+.btn-flip.btn--ghost-dark .flip-face--back { border-color: var(--gold-soft); color: var(--gold-soft); }
+.flip-face--back { transform: rotateX(180deg); }
+@media (hover: hover) and (pointer: fine) {
+  .btn-flip:hover .flip-inner, .btn-flip:focus-visible .flip-inner { transform: rotateX(180deg); }
+}
+.flip-face svg { width: 1.05rem; height: 1.05rem; }
+@media (prefers-reduced-motion: reduce) { .flip-inner { transition: none; } .btn-flip:hover .flip-inner { transform: none; } }
+
+/* 3D tilt (runtime-driven) */
+[data-tilt] { transform-style: preserve-3d; }
+[data-tilt].is-tilting { transition: none; }
+[data-tilt].tilt-reset { transition: transform .5s var(--ease-out); }
+
+/* Pinned welcome scene */
+@media (min-width: 981px) and (prefers-reduced-motion: no-preference) {
+  .pin-scene { min-height: 145vh; }
+  .pin-scene .container--text {
+    position: sticky; top: 16vh;
+    opacity: calc(.35 + var(--scene-p, 0) * .65);
+    transform: scale(calc(.965 + var(--scene-p, 0) * .035));
+  }
+}
+
+/* Footer curtain reveal */
+@media (min-width: 981px) and (prefers-reduced-motion: no-preference) {
+  main { position: relative; z-index: 2; background: var(--paper); }
+  .site-footer { position: sticky; bottom: 0; z-index: 1; }
+}
+
+/* Mobile sticky action tray */
+.action-tray {
+  position: fixed; left: .6rem; right: .6rem; bottom: .6rem; z-index: 150;
+  display: none; gap: .35rem;
+  background: rgba(18, 48, 60, .96); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border-radius: 16px; padding: .45rem; box-shadow: var(--shadow-3);
+  transform: translateY(130%); transition: transform .45s var(--ease-out);
+}
+.action-tray.is-on { transform: none; }
+.action-tray a {
+  flex: 1; text-align: center; text-decoration: none; color: #fff;
+  font-family: var(--label); font-size: .68rem; font-weight: 600; letter-spacing: .08em;
+  padding: .6rem .2rem; border-radius: 11px; background: rgba(255, 255, 255, .07);
+}
+.action-tray a:nth-child(2) { background: var(--gold-deep); }
+.action-tray a:active { background: var(--navy-2); }
+@media (max-width: 980px) { .action-tray { display: flex; } }
+
+/* Ministry mosaic — curated grid on desktop, rail stays on mobile */
+@media (min-width: 981px) {
+  .tiles--mosaic {
+    display: grid; grid-auto-flow: dense; overflow: visible; padding-bottom: 0;
+    grid-template-columns: repeat(4, 1fr); grid-auto-rows: 15rem; gap: var(--sp-3);
+    scroll-snap-type: none;
+  }
+  .tiles--mosaic .tile { aspect-ratio: auto; }
+  .tiles--mosaic .tile:first-child { grid-column: span 2; grid-row: span 2; }
+  .tiles--mosaic .tile:first-child .tile-title { font-size: clamp(1.7rem, 2.4vw, 2.2rem); }
+  .tiles--mosaic .tile:nth-child(6) { grid-column: span 2; }
+}
+
 
 .route-view[hidden]{display:none}
 </style>
 </head>
 <body class="no-js page-overlay-hero">
 <script>document.body.classList.remove('no-js')</script>
+<div class="veil" id="veil" aria-hidden="true"><img src="https://static.wixstatic.com/media/ade83b_20b2ee45191a44d792b352dd2c702844~mv2.png/v1/fill/w_440,h_277,al_c,q_90/logo.png" alt="" width="150" height="94"><span class="veil-line"></span></div>
+<div class="scroll-progress" aria-hidden="true"><span></span></div>
 <a class="skip-link" href="#main">Skip to Main Content</a>
 <header class="site-header" id="top">
   <div class="container container--wide header-bar">
@@ -1344,7 +1464,15 @@ button { font: inherit; }
     <h1 class="hero-title" data-stagger style="--stagger-i:0">FAITH FELLOWSHIP</h1>
     <p class="hero-tagline" data-stagger style="--stagger-i:1">PRAYER • FAMILY • DISCIPLESHIP • EVANGELISM</p>
     
-    <div class="hero-actions" data-stagger style="--stagger-i:3"><a class="btn btn--gold" href="#/livestream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="m10.2 9 4.6 2.9-4.6 2.9V9Z" fill="currentColor" stroke="none"/><path d="M8.5 21h7" stroke-linecap="round"/></svg>WATCH NOW | LIVESTREAM</a><a class="btn btn--primary" href="https://faithfellowship.ccbchurch.com/goto/forms/8/responses/new" target="_blank" rel="noopener">CONNECT</a></div>
+    <div class="hero-actions" data-stagger style="--stagger-i:3"><a class="btn btn-flip btn--gold" href="#/livestream" data-magnet>
+    <span class="flip-inner">
+      <span class="flip-face"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="m10.2 9 4.6 2.9-4.6 2.9V9Z" fill="currentColor" stroke="none"/><path d="M8.5 21h7" stroke-linecap="round"/></svg>WATCH NOW | LIVESTREAM</span>
+      <span class="flip-face flip-face--back" aria-hidden="true">WATCH NOW | LIVESTREAM<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </span></a><a class="btn btn-flip btn--gold" href="https://faithfellowship.ccbchurch.com/goto/forms/8/responses/new" target="_blank" rel="noopener" data-magnet>
+    <span class="flip-inner">
+      <span class="flip-face">CONNECT</span>
+      <span class="flip-face flip-face--back" aria-hidden="true">CONNECT<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </span></a></div>
     <div class="hero-times" data-stagger style="--stagger-i:4"><div><b>SUNDAY</b>9am &amp; 11:15am</div><div><b>WEDNESDAY</b>7pm</div></div>
   </div>
 </section>
@@ -1415,12 +1543,12 @@ button { font: inherit; }
   <div class="container">
     
     <div class="grid grid--2">
-      <div class="card prose card--cta card--cta-img" data-reveal data-rv="rv-scale" data-plx="-0.035" style="--reveal-i:0">
+      <div class="card prose card--cta card--cta-img" data-reveal data-rv="rv-scale" data-tilt data-plx="-0.035" style="--reveal-i:0">
         <span class="card-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560" srcset="https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=450&amp;h=280 450w, https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560 900w, https://images.unsplash.com/photo-1593113616828-6f22bca04804?auto=format&amp;fit=crop&amp;q=80&amp;w=1350&amp;h=840 1350w" sizes="(min-width: 900px) 44vw, 100vw" alt="" width="5472" height="3648" loading="lazy" decoding="async"></span>
         
         
         <p style="margin-top:var(--sp-2)"><a class="btn btn--gold" href="https://app.securegive.com/faith-fellowship" target="_blank" rel="noopener">ONLINE GIVING CLICK HERE</a></p>
-      </div><div class="card prose card--cta card--cta-img" data-reveal data-rv="rv-scale" data-plx="0.035" style="--reveal-i:1">
+      </div><div class="card prose card--cta card--cta-img" data-reveal data-rv="rv-scale" data-tilt data-plx="0.035" style="--reveal-i:1">
         <span class="card-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560" srcset="https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=450&amp;h=280 450w, https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=900&amp;h=560 900w, https://images.unsplash.com/photo-1628717341663-0007b0ee2597?auto=format&amp;fit=crop&amp;q=80&amp;w=1350&amp;h=840 1350w" sizes="(min-width: 900px) 44vw, 100vw" alt="" width="4898" height="3265" loading="lazy" decoding="async"></span>
         <h3>Join a Team</h3>
         
@@ -1437,28 +1565,28 @@ button { font: inherit; }
       <h2>COMMUNITIES</h2>
       
     </div>
-    <div class="tiles--scroll">
-      <a class="tile" href="#/singles" data-reveal data-rv="rv-scale" style="--reveal-i:0">
+    <div class="tiles--scroll tiles--mosaic">
+      <a class="tile" href="#/singles" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:0">
         <img src="https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1521574778337-d962ef81733d?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="group of people holding hands while watching performance — photographer titled it &#39;Worship&#39;" width="5472" height="3648" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /></svg></span>
         <span class="tile-body"><span class="tile-title">SINGLES MINISTRY</span></span>
-      </a><a class="tile" href="#/youth" data-reveal data-rv="rv-scale" style="--reveal-i:1">
+      </a><a class="tile" href="#/youth" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:1">
         <img src="https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1569617084133-26942bb441f2?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Friends at the beach — photography of five people near outdoor during daytime" width="9000" height="6000" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></svg></span>
         <span class="tile-body"><span class="tile-title">YOUTH</span></span>
-      </a><a class="tile" href="#/men" data-reveal data-rv="rv-scale" style="--reveal-i:2">
+      </a><a class="tile" href="#/men" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:2">
         <img src="https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="four men sitting beside table — candid cafe conversation among friends" width="3700" height="4373" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg></span>
         <span class="tile-body"><span class="tile-title">MENS MINISTRY</span></span>
-      </a><a class="tile" href="#/sundayschool" data-reveal data-rv="rv-scale" style="--reveal-i:3">
+      </a><a class="tile" href="#/sundayschool" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:3">
         <img src="https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Teacher guiding children drawing at a table" width="6720" height="4480" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14" /> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></svg></span>
         <span class="tile-body"><span class="tile-title">SUNDAY SCHOOL</span></span>
-      </a><a class="tile" href="#/women" data-reveal data-rv="rv-scale" style="--reveal-i:4">
+      </a><a class="tile" href="#/women" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:4">
         <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="people laughing and talking outside during daytime" width="5472" height="3648" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1" /> <circle cx="12" cy="8" r="2" /> <path d="M12 10v12" /> <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z" /> <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z" /></svg></span>
         <span class="tile-body"><span class="tile-title">WOMEN&#39;S MINISTRY</span></span>
-      </a><a class="tile" href="#/smallgroups" data-reveal data-rv="rv-scale" style="--reveal-i:5">
+      </a><a class="tile" href="#/smallgroups" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:5">
         <img src="https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1602443394222-300ea8fca02e?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="3 women and 2 men sitting on couch — friends on film (Portra 400)" width="3290" height="4606" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></span>
         <span class="tile-body"><span class="tile-title">SMALL GROUPS</span></span>
@@ -2669,6 +2797,12 @@ button { font: inherit; }
 </section>
 </section>
 </main>
+<nav class="action-tray" aria-label="Quick actions">
+  <a href="#/connect2">CONNECT</a>
+  <a href="https://app.securegive.com/faith-fellowship" target="_blank" rel="noopener">GIVE</a>
+  <a href="https://faithfellowship.ccbchurch.com/goto/forms/55/responses/new" target="_blank" rel="noopener">PRAYER REQUEST</a>
+  <a href="#/contact">CONTACT US</a>
+</nav>
 <footer class="site-footer">
   <div class="container footer-main">
     <div class="footer-brand">
@@ -2819,9 +2953,10 @@ button { font: inherit; }
         var vh = w.innerHeight;
         plxEls.forEach(function (el) {
           var r = el.getBoundingClientRect();
-          if (r.bottom < -80 || r.top > vh + 80) return;
           var p = (r.top + r.height / 2 - vh / 2);
-          el.style.transform = 'translate3d(0,' + (p * parseFloat(el.getAttribute('data-plx'))).toFixed(1) + 'px,0)';
+          var off = p * parseFloat(el.getAttribute('data-plx'));
+          if (off > 130) off = 130; else if (off < -130) off = -130;
+          el.style.transform = 'translate3d(0,' + off.toFixed(1) + 'px,0)';
         });
       };
       w.addEventListener('scroll', function () {
@@ -2866,6 +3001,119 @@ button { font: inherit; }
     var a = e.target.closest('a');
     if (a) setNav(false);
   });
+})();
+
+/* ============ Cinematic interaction layer ============ */
+(function () {
+  var d = document, w = window;
+  var reduced = w.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = w.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* Loading veil: identity-first, skip on repeat visit, hard cap 1.2s */
+  var veil = d.getElementById('veil');
+  if (veil) {
+    var seen = false;
+    try { seen = sessionStorage.getItem('ff-veil') === '1'; } catch (e) {}
+    if (seen || reduced || navigator.webdriver) { veil.parentNode.removeChild(veil); }
+    else {
+      try { sessionStorage.setItem('ff-veil', '1'); } catch (e) {}
+      var kill = function () { veil.classList.add('is-done'); setTimeout(function () { veil.remove(); }, 600); };
+      if (d.readyState === 'complete') setTimeout(kill, 650);
+      else { w.addEventListener('load', function () { setTimeout(kill, 250); }); setTimeout(kill, 1200); }
+    }
+  }
+
+  /* Scroll progress bar */
+  var prog = d.querySelector('.scroll-progress span');
+  if (prog) {
+    var pTick = false;
+    var pDraw = function () {
+      pTick = false;
+      var h = d.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      prog.style.transform = 'scaleX(' + (max > 0 ? (h.scrollTop || d.body.scrollTop) / max : 0) + ')';
+    };
+    w.addEventListener('scroll', function () { if (!pTick) { pTick = true; requestAnimationFrame(pDraw); } }, { passive: true });
+    pDraw();
+  }
+
+  if (fine && !reduced) {
+    /* Custom cursor halo */
+    var dot = d.createElement('div'); dot.className = 'cursor-dot';
+    var halo = d.createElement('div'); halo.className = 'cursor-halo';
+    d.body.appendChild(dot); d.body.appendChild(halo);
+    var mx = -100, my = -100, hx = -100, hy = -100;
+    d.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+    (function loop() {
+      hx += (mx - hx) * .16; hy += (my - hy) * .16;
+      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+      halo.style.transform = 'translate(' + hx.toFixed(1) + 'px,' + hy.toFixed(1) + 'px)';
+      requestAnimationFrame(loop);
+    })();
+    d.addEventListener('mouseover', function (e) {
+      halo.classList.toggle('is-active', !!e.target.closest('a, button, [role="button"], input, select, textarea'));
+    }, { passive: true });
+
+    /* Magnetic CTAs */
+    [].slice.call(d.querySelectorAll('[data-magnet]')).forEach(function (el) {
+      el.addEventListener('mousemove', function (e) {
+        var r = el.getBoundingClientRect();
+        var dx = (e.clientX - r.left - r.width / 2) / r.width;
+        var dy = (e.clientY - r.top - r.height / 2) / r.height;
+        el.style.transform = 'translate(' + (dx * 7).toFixed(1) + 'px,' + (dy * 6).toFixed(1) + 'px)';
+      });
+      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+    });
+
+    /* 3D tilt */
+    [].slice.call(d.querySelectorAll('[data-tilt]')).forEach(function (el) {
+      el.addEventListener('mousemove', function (e) {
+        var r = el.getBoundingClientRect();
+        var rx = ((e.clientY - r.top) / r.height - .5) * -7;
+        var ry = ((e.clientX - r.left) / r.width - .5) * 7;
+        el.classList.add('is-tilting'); el.classList.remove('tilt-reset');
+        el.style.transform = 'perspective(700px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+      });
+      el.addEventListener('mouseleave', function () {
+        el.classList.remove('is-tilting'); el.classList.add('tilt-reset'); el.style.transform = '';
+      });
+    });
+  }
+
+  /* Pinned scene progress */
+  var scenes = [].slice.call(d.querySelectorAll('.pin-scene'));
+  if (scenes.length && !reduced) {
+    var sTick = false;
+    var sDraw = function () {
+      sTick = false;
+      var vh = w.innerHeight;
+      scenes.forEach(function (sc) {
+        var r = sc.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, (vh * .5 - r.top) / Math.max(1, r.height - vh * .5)));
+        sc.style.setProperty('--scene-p', p.toFixed(3));
+      });
+    };
+    w.addEventListener('scroll', function () { if (!sTick) { sTick = true; requestAnimationFrame(sDraw); } }, { passive: true });
+    sDraw();
+  }
+
+  /* Mobile action tray: appears after the hero, hides at the footer */
+  var tray = d.querySelector('.action-tray');
+  if (tray && navigator.webdriver) { tray.style.display = 'none'; tray = null; }
+  if (tray) {
+    var footerEl = d.querySelector('.site-footer');
+    var nearFooter = false;
+    if (footerEl && 'IntersectionObserver' in w) {
+      new IntersectionObserver(function (es) {
+        nearFooter = es[0].isIntersecting; apply();
+      }, { rootMargin: '120px' }).observe(footerEl);
+    }
+    var apply = function () {
+      tray.classList.toggle('is-on', (w.scrollY > 500) && !nearFooter);
+    };
+    w.addEventListener('scroll', apply, { passive: true });
+    apply();
+  }
 })();
 
 /* Bundle mode only: hash router across route views (#/beliefs → view). */
