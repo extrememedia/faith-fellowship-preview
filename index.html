@@ -265,7 +265,8 @@ button { font: inherit; }
 }
 .nav-toggle svg { display: block; width: 22px; height: 22px; }
 
-/* Transparent header floating over the home video hero (Highlands-style) */
+/* Transparent header floating over the home video hero (desktop only) */
+@media (min-width: 981px) {
 .page-overlay-hero .site-header {
   position: fixed; top: 0; left: 0; right: 0;
 }
@@ -277,6 +278,7 @@ button { font: inherit; }
 .page-overlay-hero .site-header:not(.is-scrolled) .header-logo img {
   filter: brightness(0) invert(1) drop-shadow(0 1px 8px rgba(0, 0, 0, .35));
 }
+}
 @media (min-width: 981px) {
   .page-overlay-hero .site-header:not(.is-scrolled) .nav-link { color: #fff; }
   .page-overlay-hero .site-header:not(.is-scrolled) .nav-link:hover { color: var(--gold-soft); background: rgba(255, 255, 255, .12); }
@@ -284,11 +286,8 @@ button { font: inherit; }
   .page-overlay-hero .site-header:not(.is-scrolled) .btn--primary { background-color: rgba(255, 255, 255, .14); background-image: none; border-color: rgba(255, 255, 255, .6); }
   .page-overlay-hero .site-header:not(.is-scrolled) .btn--primary:hover { background-color: rgba(255, 255, 255, .26); }
 }
-.page-overlay-hero:not(.nav-locked) .site-header:not(.is-scrolled) .nav-toggle {
-  color: #fff; border-color: rgba(255, 255, 255, .55);
-}
-/* Home hero: full-bleed to the very top, taller */
-.page-overlay-hero .hero { min-height: min(100svh, 64rem); }
+/* Home hero: page content starts under the fixed desktop header naturally
+   (the video band is top-justified; mobile keeps the standard sticky header) */
 
 /* Mobile drawer */
 @media (max-width: 980px) {
@@ -375,6 +374,30 @@ button { font: inherit; }
 .scroll-cue::before { content: ""; width: 4px; height: 9px; border-radius: 4px; background: rgba(255, 255, 255, .9); animation: cue 1.8s ease-in-out infinite; }
 @keyframes cue { 0%, 100% { transform: translateY(0); opacity: 1; } 55% { transform: translateY(12px); opacity: .15; } }
 @media (prefers-reduced-motion: reduce) { .scroll-cue::before { animation: none; } }
+
+/* Video-band hero: full-width, top-justified, whole frame visible, nothing behind */
+.hero--videoband { display: block; min-height: 0; background: var(--navy); color: #fff; position: relative; }
+.hero--videoband .hero-video {
+  position: relative; inset: auto; width: 100%; z-index: 0; overflow: hidden;
+  pointer-events: none; background: var(--navy);
+}
+.hero--videoband .hero-video iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  top: auto; left: auto; transform: none; border: 0;
+}
+.hero--videoband .hero-inner { text-align: center; padding: 2.2rem 0 3rem; }
+.hero--videoband .hero-scrim--band { display: none; }
+@media (min-width: 981px) {
+  .hero--videoband .hero-inner {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; margin-inline: auto;
+    padding: 0 0 clamp(1.4rem, 4vh, 3rem);
+  }
+  .hero--videoband .hero-scrim--band {
+    display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(10, 24, 31, .44) 0%, rgba(10, 24, 31, 0) 32%, rgba(10, 24, 31, 0) 52%, rgba(11, 27, 34, .78) 100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) { .hero--videoband .hero-video { display: none; } }
 
 /* Legacy hero variants inherit the welcome treatment */
 .hero--light, .hero--cinema { color: #fff; }
@@ -1314,10 +1337,9 @@ button { font: inherit; }
 
 <section class="route-view" data-route="/" data-title="Church | San Leandro | Faith Fellowship Foursquare Church" data-default data-overlay-hero hidden>
 
-<section class="hero" aria-label="Faith Fellowship">
-  <div class="hero-media" data-parallax><img src="https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?auto=format&amp;fit=crop&amp;q=80&amp;w=1920&amp;h=1280" srcset="https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=640 960w, https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?auto=format&amp;fit=crop&amp;q=80&amp;w=1920&amp;h=1280 1920w, https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?auto=format&amp;fit=crop&amp;q=80&amp;w=2600&amp;h=1733 2600w" sizes="100vw" alt="Worshippers with hands raised in a beam of warm light" width="5760" height="3840" fetchpriority="high"></div>
-  <div class="hero-video" aria-hidden="true"><iframe src="https://player.vimeo.com/video/1203088327?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" title="Faith Web Banner" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" tabindex="-1"></iframe></div>
-  <div class="hero-scrim"></div>
+<section class="hero hero--videoband" aria-label="Faith Fellowship">
+  <div class="hero-video" style="aspect-ratio:2.3686" aria-hidden="true"><iframe src="https://player.vimeo.com/video/1203088327?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" title="Faith Web Banner" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" tabindex="-1"></iframe></div>
+  <div class="hero-scrim hero-scrim--band" aria-hidden="true"></div>
   <div class="container hero-inner">
     <h1 class="hero-title" data-stagger style="--stagger-i:0">FAITH FELLOWSHIP</h1>
     <p class="hero-tagline" data-stagger style="--stagger-i:1">PRAYER • FAMILY • DISCIPLESHIP • EVANGELISM</p>
@@ -1325,7 +1347,6 @@ button { font: inherit; }
     <div class="hero-actions" data-stagger style="--stagger-i:3"><a class="btn btn--gold" href="#/livestream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="m10.2 9 4.6 2.9-4.6 2.9V9Z" fill="currentColor" stroke="none"/><path d="M8.5 21h7" stroke-linecap="round"/></svg>WATCH NOW | LIVESTREAM</a><a class="btn btn--primary" href="https://faithfellowship.ccbchurch.com/goto/forms/8/responses/new" target="_blank" rel="noopener">CONNECT</a></div>
     <div class="hero-times" data-stagger style="--stagger-i:4"><div><b>SUNDAY</b>9am &amp; 11:15am</div><div><b>WEDNESDAY</b>7pm</div></div>
   </div>
-  <div class="scroll-cue" aria-hidden="true"></div>
 </section>
 
 <section class="section section--tight section--overlap" aria-label="Quick links">
