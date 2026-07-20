@@ -380,17 +380,27 @@ button { font: inherit; }
 .hero--videoband .hero-video {
   position: relative; inset: auto; width: 100%; z-index: 0; overflow: hidden;
   pointer-events: none; background: var(--navy);
+  aspect-ratio: 2.014 !important; /* 2.3686 x 0.85 — sides cropped ~15% total */
 }
 .hero--videoband .hero-video iframe {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  top: auto; left: auto; transform: none; border: 0;
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  height: 100%; width: 117.65%; border: 0;
 }
 .hero--videoband .hero-inner { text-align: center; padding: 2.2rem 0 3rem; }
 .hero--videoband .hero-scrim--band { display: none; }
 @media (min-width: 981px) {
+  /* Broadcast lower-third: compact, left-aligned, clear of the overlap deck */
   .hero--videoband .hero-inner {
     position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; margin-inline: auto;
-    padding: 0 0 clamp(1.4rem, 4vh, 3rem);
+    text-align: left; padding: 0 0 clamp(4.6rem, 9vh, 6.2rem);
+  }
+  .hero--videoband .hero-title { font-size: clamp(2rem, 3.4vw, 3.3rem); margin-bottom: .4rem; }
+  .hero--videoband .hero-tagline { font-size: clamp(.72rem, .95vw, .85rem); margin-bottom: 1rem; }
+  .hero--videoband .hero-tagline::before, .hero--videoband .hero-tagline::after { display: none; }
+  .hero--videoband .hero-actions { justify-content: flex-start; margin-top: .4rem; }
+  .hero--videoband .hero-times {
+    justify-content: flex-start; gap: 1rem 2rem; margin-top: 1.1rem; padding-top: .9rem;
+    max-width: 34rem;
   }
   .hero--videoband .hero-scrim--band {
     display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -1578,10 +1588,10 @@ button { font: inherit; }
         <img src="https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1540634759006-203f597e1a34?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="four men sitting beside table — candid cafe conversation among friends" width="3700" height="4373" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg></span>
         <span class="tile-body"><span class="tile-title">MENS MINISTRY</span></span>
-      </a><a class="tile" href="#/sundayschool" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:3">
+      </a><a class="tile" href="#/faithkidz" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:3">
         <img src="https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1761604478724-13fe879468cf?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="Teacher guiding children drawing at a table" width="6720" height="4480" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14" /> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></svg></span>
-        <span class="tile-body"><span class="tile-title">SUNDAY SCHOOL</span></span>
+        <span class="tile-body"><span class="tile-title">FAITHKIDZ</span></span>
       </a><a class="tile" href="#/women" data-reveal data-rv="rv-scale" data-tilt style="--reveal-i:4">
         <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800" srcset="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=320&amp;h=400 320w, https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=640&amp;h=800 640w, https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&amp;fit=crop&amp;q=80&amp;w=960&amp;h=1200 960w" sizes="(min-width: 700px) 30vw, 100vw" alt="people laughing and talking outside during daytime" width="5472" height="3648" loading="lazy" decoding="async">
         <span class="tile-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1" /> <circle cx="12" cy="8" r="2" /> <path d="M12 10v12" /> <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z" /> <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z" /></svg></span>
